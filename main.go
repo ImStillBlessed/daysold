@@ -75,6 +75,24 @@ func askInput(dob *Birthday) {
 	}
 }
 
+// converts number to ordinal 1 = 1st...
+func getOrdinalDay(day int) string {
+	suffix := "th"
+
+	if day%100 < 11 || day%100 > 13 {
+		switch day % 10 {
+		case 1:
+			suffix = "st"
+		case 2:
+			suffix = "nd"
+		case 3:
+			suffix = "rd"
+		}
+	}
+
+	return fmt.Sprintf("%d%s", day, suffix)
+}
+
 func main() {
 	dobFlag := flag.String("dob", "", "Your date of birth in DD-MM-YYYY format")
 	flag.Parse()
@@ -103,7 +121,7 @@ func main() {
 		askInput(&dob)
 	}
 
-	fmt.Printf("Born on the %d of %s, %d\n", dob.Day, dob.Date.Month(), dob.Year)
+	fmt.Printf("Born on the %s of %s, %d\n", getOrdinalDay(dob.Day), dob.Date.Month(), dob.Year)
 	calculateAge(dob, &age)
 	fmt.Printf("\nYou have lived for:\n")
 	fmt.Printf("🟢 %d years and %d months\n", age.Years, age.ExtraMonths)
